@@ -5,10 +5,10 @@ import time
 product_id = 'BTC-USD'
 uri = 'https://api.gdax.com/products/' + product_id + '/candles'
 
-start = dt.datetime(2017,12, 1, 0, tzinfo=dt.timezone.utc)
+start = dt.datetime(2016, 1, 1, 0, tzinfo=dt.timezone.utc)
 end   = dt.datetime(2018, 1,20,23, tzinfo=dt.timezone.utc)
-delta = dt.timedelta(hours=5)
-granularity = 60 # seconds
+delta = dt.timedelta(hours=300) # 5 hrs if gran=60, 75 if gran=900, 300 if gran=3600
+granularity = 3600 # seconds
 
 data = []
 slice_start = start
@@ -33,13 +33,18 @@ while slice_start < end:
     slice_start = slice_end
     time.sleep(0.5)
 
-print(len(data))
-data = [list(t) for t in {tuple(row) for row in data}] # dedupe
 data.sort(key=lambda x: x[0])
-print(len(data))
 
-filename = ('btc_usd_candles_' + start.strftime('%Y%m%d%H') 
-            + '-' + slice_start.strftime('%Y%m%d%H') +'.csv')
+# Dedupe by timestamp.
+len_before_dedupe = len(data)
+for i in reversed(range(len(data)-1)):
+    if data[i][0] == data[i+1][0]:
+        del data[i+1]
+print("Removed " + str(len_before_dedupe - len(data)) + " duplicates.")
+
+filename = ('gdax_' + product_id.lower() + '_candles_gran'
+            + str(granularity) + '_' + start.strftime('%Y%m%d%H') + '-'
+            + slice_start.strftime('%Y%m%d%H') +'.csv')
 with open(filename,'w') as fp:
     fp.write('time,low,high,open,close,volume\n')
     for row in data:
