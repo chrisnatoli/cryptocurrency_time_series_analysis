@@ -2,13 +2,13 @@ import requests
 import datetime as dt
 import time
 
-product_id = 'BTC-USD'
+product_id = 'ETH-USD'
 uri = 'https://api.gdax.com/products/' + product_id + '/candles'
 
-start = dt.datetime(2016, 1, 1, 0, tzinfo=dt.timezone.utc)
+start = dt.datetime(2017, 1, 1, 0, tzinfo=dt.timezone.utc)
 end   = dt.datetime(2018, 1,20,23, tzinfo=dt.timezone.utc)
-delta = dt.timedelta(hours=300) # 5 hrs if gran=60, 75 if gran=900, 300 if gran=3600
-granularity = 3600 # seconds
+delta = dt.timedelta(hours=5) # 5 hrs if gran=60, 75 if gran=900, 300 if gran=3600
+granularity = 60 # seconds
 
 data = []
 slice_start = start
