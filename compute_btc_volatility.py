@@ -2,7 +2,7 @@ import numpy as np
 import datetime as dt
 import pandas as pd
 
-candles_filename_prefix = 'gdax_btc-usd_candles'
+candles_filename_prefix = 'data/gdax_btc-usd_candles'
 candles_filename_suffix = '_gran60_2017010100-2018012100.csv'
 candles = pd.read_csv(candles_filename_prefix + candles_filename_suffix)
 candles = candles.set_index('time')
@@ -22,7 +22,7 @@ for d in days:
     volatility = np.var(days_log_returns)
     volatilities.append(volatility)
 
-with open('btc_volatility' + candles_filename_suffix, 'w') as fp:
+with open('data/btc_volatility' + candles_filename_suffix, 'w') as fp:
     fp.write('date,volatility\n')
     for i in range(len(days)):
         day_str = days[i].strftime('%Y-%m-%d')

@@ -40,9 +40,9 @@ len_before_dedupe = len(data)
 for i in reversed(range(len(data)-1)):
     if data[i][0] == data[i+1][0]:
         del data[i+1]
-print("Removed " + str(len_before_dedupe - len(data)) + " duplicates.")
+print('Removed ' + str(len_before_dedupe - len(data)) + ' duplicates.')
 
-filename = ('gdax_' + product_id.lower() + '_candles_gran'
+filename = ('data/gdax_' + product_id.lower() + '_candles_gran'
             + str(granularity) + '_' + start.strftime('%Y%m%d%H') + '-'
             + slice_start.strftime('%Y%m%d%H') +'.csv')
 with open(filename,'w') as fp:

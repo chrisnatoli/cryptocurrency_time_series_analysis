@@ -24,4 +24,4 @@ df['Avg tx fee (USD)'] = df['Avg tx fee (BTC)'] * df['BTC-USD']
 
 df = df['20130101':]
 
-df.to_csv('btc_transaction_fee_data.csv')
+df.to_csv('data/btc_transaction_fee_data.csv')

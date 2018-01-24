@@ -37,7 +37,7 @@ len_before_dedupe = len(data)
 for i in reversed(range(len(data)-1)):
     if data[i][0] == data[i+1][0]:
         del data[i+1]
-print("Removed " + str(len_before_dedupe - len(data)) + " duplicates.")
+print('Removed ' + str(len_before_dedupe - len(data)) + ' duplicates.')
 
 # Dedupe by timestamp.
 #data = [list(t) for t in {tuple(row) for row in data}] # dedupe
@@ -46,7 +46,7 @@ for i in reversed(range(len(data)-1)):
         del data[i+1]
 print(len(data))
 
-filename = ('korbit_' + cryptocoin.lower() + '-krw_candles_gran3600_'
+filename = ('data/korbit_' + cryptocoin.lower() + '-krw_candles_gran3600_'
             + start.strftime('%Y%m%d%H') + '-'
             + slice_end.strftime('%Y%m%d%H') +'.csv')
 with open(filename,'w') as fp:
