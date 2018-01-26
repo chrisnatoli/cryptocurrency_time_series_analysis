@@ -63,4 +63,5 @@ plt.xlabel('Date')
 plt.tight_layout()
 plt.savefig('plots/volatility_over_time.png', dpi=200)
 plt.close()
-print('\nMean volatility is ' + str(df['volatility'].mean()))
+
+print('\n' + len(df.index) + ' datapoints')
