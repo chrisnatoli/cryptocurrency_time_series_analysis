@@ -3,7 +3,7 @@ import statsmodels.formula.api as sm
 import matplotlib.pyplot as plt
 
 tx_fee_df = pd.read_csv('data/btc_tx_fee_data.csv').set_index('Date')
-tx_fee_df = tx_fee_df[['Avg tx fee (BTC)', 'Avg tx fee (USD)']]
+tx_fee_df = tx_fee_df[['Avg tx fee (BTC)', 'Avg tx fee (USD)', 'Num txs']]
 
 volatility_filename='data/btc_volatility_gran900_2016010100-2018012303.csv'
 df = pd.read_csv(volatility_filename).set_index('date')
@@ -11,7 +11,8 @@ df = pd.read_csv(volatility_filename).set_index('date')
 df = df.join(tx_fee_df, how='inner')
 df['L_volatility'] = df['volatility'].shift(-1)
 df = df.rename(columns={'Avg tx fee (BTC)':'txfee_btc',
-                        'Avg tx fee (USD)':'txfee_usd'}).dropna()
+                        'Avg tx fee (USD)':'txfee_usd',
+                        'Num txs':'num_txs'}).dropna()
 print('Data spans from ' + df.index[0] + ' to ' + df.index[-1])
 print(str(len(df.index)) + ' datapoints')
 
@@ -19,7 +20,7 @@ def reg_volatility_on_txfee(currency):
     print('\nRegressing volatility on tx fee IN ' + currency.upper()
           + ' and lag of volatility:')
     result = sm.ols(formula = 'volatility ~ txfee_'
-                              + currency + ' + L_volatility',
+                              + currency + ' + L_volatility + num_txs',
                     data=df).fit()
     print(result.summary())
     print('\nIntercept has beta=' + str(result.params[0])
@@ -44,8 +45,11 @@ reg_volatility_on_txfee('usd')
 plot_collinearity('volatility', 'txfee_btc')
 plot_collinearity('volatility', 'txfee_usd')
 plot_collinearity('volatility', 'L_volatility')
+plot_collinearity('volatility', 'num_txs')
 plot_collinearity('txfee_btc', 'L_volatility')
 plot_collinearity('txfee_usd', 'L_volatility')
+plot_collinearity('txfee_usd', 'num_txs')
+plot_collinearity('txfee_btc', 'num_txs')
 
 # Also plot volatility over time; I'm curious.
 plt.plot(range(len(df.index)), df['volatility'],
@@ -64,4 +68,4 @@ plt.tight_layout()
 plt.savefig('plots/volatility_over_time.png', dpi=200)
 plt.close()
 
-print('\n' + len(df.index) + ' datapoints')
+print('\n' + str(len(df.index)) + ' datapoints')
